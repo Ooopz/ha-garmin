@@ -20,6 +20,7 @@ from .const import (
     DEVICES_URL,
     ENDURANCE_SCORE_URL,
     FITNESS_AGE_URL,
+    SENSORS_URL,
     GARMIN_CN_CONNECT_API,
     GARMIN_CONNECT_API,
     GEAR_DEFAULTS_URL,
@@ -979,6 +980,11 @@ class GarminClient:
                     merged.update({k: v for k, v in item.items() if v is not None})
             return merged
         return data if isinstance(data, dict) else {}
+
+    async def get_sensors(self) -> list[dict[str, Any]]:
+        """Get paired ANT+/BLE sensors and their battery status."""
+        data = await self._request("GET", SENSORS_URL)
+        return data if isinstance(data, list) else []
 
     async def get_power_to_weight(
         self, target_date: date | None = None

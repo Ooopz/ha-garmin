@@ -168,6 +168,13 @@ async def main():
     menstrual_data = await client.fetch_menstrual_data(today)
     print_section("Menstrual Data", menstrual_data)
 
+    # === FETCH SENSORS DATA ===
+    print("\n" + "=" * 60)
+    print("  FETCHING SENSORS DATA")
+    print("=" * 60)
+    sensors_data = await client.get_sensors()
+    print_section("Sensors Data", sensors_data)
+
     # === SHOW NULL/NONE VALUES ===
     print("\n" + "=" * 60)
     print("  VALUES THAT ARE None (may need historical fetch)")
@@ -181,6 +188,7 @@ async def main():
         "gear": gear_data,
         "blood_pressure": blood_pressure_data,
         "menstrual": menstrual_data,
+        "sensors": sensors_data,
     }
 
     for section, data in all_data.items():
@@ -190,6 +198,9 @@ async def main():
                 print(f"\n  {section.upper()}:")
                 for k in sorted(none_keys):
                     print(f"    - {k}")
+
+    # Save refreshed tokens so next run doesn't need to re-authenticate
+    auth.save_session(TOKEN_FILE)
 
     # === SAVE FULL DATA TO JSON ===
     output_file = ".garmin_data_dump.json"
