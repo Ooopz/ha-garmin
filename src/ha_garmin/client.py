@@ -1872,11 +1872,10 @@ class GarminClient:
                 unmeasurable_sleep_seconds = daily_sleep.get("unmeasurableSleepSeconds")
                 sleep_need_data = daily_sleep.get("sleepNeed") or {}
                 next_sleep_need_data = daily_sleep.get("nextSleepNeed") or {}
-                next_sleep_need_baseline = next_sleep_need_data.get("baseline")
                 sleep_need = (
-                    next_sleep_need_baseline
-                    if next_sleep_need_baseline is not None
-                    else sleep_need_data.get("baseline")
+                    next_sleep_need_data.get("actual")
+                    if next_sleep_need_data.get("actual") is not None
+                    else sleep_need_data.get("actual")
                 )
                 sleep_calendar_date = daily_sleep.get("calendarDate") or target_date
                 sleep_tz_offset_minutes = _extract_sleep_timezone_offset_minutes(
@@ -1901,7 +1900,7 @@ class GarminClient:
 
                 # Prefer nextSleepNeed bedtime recommendation for "tonight" values.
                 # recommendedBedtime* are minutes from midnight for bedtime, while
-                # optimal wake is derived from bedtime + sleep need baseline.
+                # optimal wake is derived from bedtime + sleep need actual.
                 recommended_bedtime_start = next_sleep_need_data.get(
                     "recommendedBedtimeStartMins"
                 )
