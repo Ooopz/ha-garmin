@@ -17,7 +17,7 @@ from pathlib import Path
 from pprint import pprint
 
 logging.basicConfig(level=logging.INFO)
-from ha_garmin import GarminAuth, GarminClient
+from ha_garmin import GarminAuth, GarminClient  # noqa: E402
 
 # === CREDENTIALS ===
 # Set these via environment variables or edit directly
